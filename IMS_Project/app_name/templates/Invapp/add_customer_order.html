@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>IMS | New Customer Order</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background: #f3f7fc;
+            font-family: 'Segoe UI', sans-serif;
+            color: #24324b;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #0b4bb3, #0d6efd);
+            min-height: 100vh;
+            padding: 28px 15px;
+            color: white;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 700;
+            padding: 0 15px;
+            margin-bottom: 45px;
+        }
+
+        .sidebar .nav-link {
+            color: #dce9ff;
+            padding: 13px 18px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .sidebar i {
+            margin-right: 12px;
+        }
+
+        .main-content {
+            padding: 35px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+            max-width: 950px;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .summary-card {
+            background: #f3f7fc;
+            border: 1px solid #dce7f5;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .total-price {
+            font-size: 27px;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 767px) {
+            .sidebar {
+                min-height: auto;
+                padding: 15px;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .main-content {
+                padding: 20px 12px;
+            }
+
+            .order-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <aside class="col-md-3 col-lg-2 sidebar">
+
+            <div class="brand">
+                <i class="bi bi-tools"></i> IMS
+            </div>
+
+            <nav class="nav flex-column">
+
+                <a href="{% url 'products_list' %}"
+                   class="nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    Dashboard
+                </a>
+
+                <a href="{% url 'products_list' %}"
+                   class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    Products
+                </a>
+
+                <a href="{% url 'customer_orders' %}"
+                   class="nav-link active">
+                    <i class="bi bi-cart-check"></i>
+                    Customer Orders
+                </a>
+
+                <a href="#" class="nav-link">
+                    <i class="bi bi-truck"></i>
+                    Suppliers
+                </a>
+
+                <a href="#" class="nav-link">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="col-md-9 col-lg-10 main-content">
+
+            <div class="mb-4">
+                <h1 class="fw-bold">
+                    New Customer Order
+                </h1>
+
+                <p class="text-muted">
+                    Create an order for hardware and
+                    construction materials.
+                </p>
+            </div>
+
+            <div class="order-card">
+
+                <h5 class="section-title">
+                    <i class="bi bi-person-lines-fill text-primary"></i>
+                    Customer Information
+                </h5>
+
+                <form method="POST" id="orderForm">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-3">
+
+                        <!-- CUSTOMER NAME -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Customer Name
+                            </label>
+
+                            {{ form.customer_name }}
+
+                            <div class="text-danger small">
+                                {{ form.customer_name.errors }}
+                            </div>
+                        </div>
+
+                        <!-- LOCATION -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Customer Location
+                            </label>
+
+                            {{ form.customer_location }}
+
+                            <div class="text-danger small">
+                                {{ form.customer_location.errors }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="section-title">
+                        <i class="bi bi-box-seam text-primary"></i>
+                        Product Information
+                    </h5>
+
+                    <div class="row g-3">
+
+                        <!-- PRODUCT -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Select Product
+                            </label>
+
+                            {{ form.product }}
+
+                            <div class="text-danger small">
+                                {{ form.product.errors }}
+                            </div>
+                        </div>
+
+                        <!-- QUANTITY -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Order Quantity
+                            </label>
+
+                            {{ form.quantity }}
+
+                            <div class="text-danger small">
+                                {{ form.quantity.errors }}
+                            </div>
+                        </div>
+
+                        <!-- PRICE -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Product Price
+                            </label>
+
+                            <input type="text"
+                                   id="productPrice"
+                                   class="form-control"
+                                   value="₱0.00"
+                                   readonly>
+                        </div>
+
+                        <!-- AVAILABLE STOCK -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Available Stock
+                            </label>
+
+                            <input type="text"
+                                   id="availableStock"
+                                   class="form-control"
+                                   value="0"
+                                   readonly>
+                        </div>
+
+                        <!-- ORDER DATE -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Order Date
+                            </label>
+
+                            <input type="date"
+                                   id="orderDate"
+                                   class="form-control"
+                                   readonly>
+                        </div>
+
+                    </div>
+
+                    <!-- ORDER SUMMARY -->
+                    <div class="summary-card mt-4">
+
+                        <h5 class="fw-bold mb-4">
+                            <i class="bi bi-receipt text-primary"></i>
+                            Order Summary
+                        </h5>
+
+                        <div class="summary-row">
+                            <span>Selected Product</span>
+                            <strong id="summaryProduct">None</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Unit Price</span>
+                            <strong id="summaryPrice">₱0.00</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Quantity</span>
+                            <strong id="summaryQuantity">0</strong>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0">
+                                Total Amount
+                            </h5>
+
+                            <div class="total-price" id="totalPrice">
+                                ₱0.00
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="stockWarning"
+                         class="alert alert-warning mt-3 d-none">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Insufficient stock or invalid quantity.
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+
+                        <button type="submit"
+                                id="saveButton"
+                                class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle"></i>
+                            Save Order
+                        </button>
+
+                        <a href="{% url 'customer_orders' %}"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- PRODUCT DATA FROM DJANGO -->
+{{ product_data|json_script:"product-data" }}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const productSelect = document.getElementById("id_product");
+    const quantityInput = document.getElementById("id_quantity");
+    const priceInput = document.getElementById("productPrice");
+    const stockInput = document.getElementById("availableStock");
+    const dateInput = document.getElementById("orderDate");
+
+    const summaryProduct = document.getElementById("summaryProduct");
+    const summaryPrice = document.getElementById("summaryPrice");
+    const summaryQuantity = document.getElementById("summaryQuantity");
+    const totalPrice = document.getElementById("totalPrice");
+
+    const stockWarning = document.getElementById("stockWarning");
+    const saveButton = document.getElementById("saveButton");
+
+    const productDataElement = document.getElementById("product-data");
+    const products = productDataElement
+        ? JSON.parse(productDataElement.textContent)
+        : {};
+
+    function formatMoney(amount) {
+        return "₱" + amount.toLocaleString("en-PH", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    // Show today's local date
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    dateInput.value = `${year}-${month}-${day}`;
+
+    function updateOrder() {
+
+        const productId = productSelect.value;
+        const product = products[productId];
+
+        const quantity = Number(quantityInput.value);
+        const validQuantity =
+            Number.isInteger(quantity) && quantity > 0;
+
+        const price = product ? Number(product.price) : 0;
+        const stock = product ? Number(product.stock) : 0;
+
+        const total = validQuantity ? price * quantity : 0;
+
+        priceInput.value = formatMoney(price);
+        stockInput.value = product ? stock : 0;
+
+        summaryProduct.textContent =
+            product ? product.name : "None";
+
+        summaryPrice.textContent = formatMoney(price);
+        summaryQuantity.textContent =
+            validQuantity ? quantity : 0;
+
+        totalPrice.textContent = formatMoney(total);
+
+        const insufficientStock =
+            product && validQuantity && quantity > stock;
+
+        const invalidOrder =
+            !product || !validQuantity || quantity > stock;
+
+        stockWarning.classList.toggle(
+            "d-none",
+            !insufficientStock
+        );
+
+        saveButton.disabled = invalidOrder;
+    }
+
+    productSelect.addEventListener("change", updateOrder);
+    quantityInput.addEventListener("input", updateOrder);
+
+    updateOrder();
+});
+</script>
+
+</body>
+</html>
