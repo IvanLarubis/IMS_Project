@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Receipt #{{ order.id }} | Hardware Store</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+            color: #1e293b;
+        }
+
+        .receipt {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .store-header {
+            text-align: center;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 22px;
+        }
+
+        .store-header h1 {
+            color: #142b4a;
+            font-size: 30px;
+            margin: 0 0 8px;
+        }
+
+        .store-header p {
+            color: #64748b;
+            margin: 5px 0;
+        }
+
+        .receipt-heading {
+            text-align: center;
+            margin: 25px 0;
+            color: #2563eb;
+            letter-spacing: 3px;
+        }
+
+        .section-title {
+            color: #142b4a;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail {
+            padding: 13px;
+            background: #f8fafc;
+            border-radius: 7px;
+        }
+
+        .detail small {
+            display: block;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .detail strong {
+            color: #142b4a;
+        }
+
+        .status {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th {
+            background: #142b4a;
+            color: white;
+            padding: 14px 10px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .total-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eff6ff;
+            border-radius: 8px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: bold;
+            color: #142b4a;
+        }
+
+        .payment-info {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .payment-info p {
+            margin: 8px 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 2px dashed #cbd5e1;
+            color: #64748b;
+        }
+
+        .footer h3 {
+            color: #142b4a;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px auto;
+        }
+
+        button, .back-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 7px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .print-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .back-btn {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        @media(max-width: 550px) {
+            body {
+                padding: 10px;
+            }
+
+            .receipt {
+                padding: 20px;
+            }
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 12px;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            .receipt {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="receipt">
+
+    <div class="store-header">
+        <h1>HARDWARE STORE</h1>
+        <p>Construction Materials and Supplies</p>
+        <p>Contact: Store Administration</p>
+        <p>Official Customer Receipt</p>
+    </div>
+
+    <h2 class="receipt-heading">ORDER RECEIPT</h2>
+
+    <h3 class="section-title">CUSTOMER INFORMATION</h3>
+
+    <div class="details">
+
+        <div class="detail">
+            <small>Receipt Number</small>
+            <strong>#{{ order.id }}</strong>
+        </div>
+
+        <div class="detail">
+            <small>Order Date</small>
+            <strong>{{ order.order_date|date:"M d, Y" }}</strong>
+        </div>
+
+        <div class="detail">
+            <small>Customer Name</small>
+            <strong>{{ order.customer_name }}</strong>
+        </div>
+
+        <div class="detail">
+            <small>Customer Location</small>
+            <strong>{{ order.customer_location }}</strong>
+        </div>
+
+        <div class="detail">
+            <small>Order Status</small>
+            <strong class="status">{{ order.status }}</strong>
+        </div>
+
+    </div>
+
+    <h3 class="section-title" style="margin-top: 25px;">
+        PURCHASE DETAILS
+    </h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>{{ order.product.name }}</td>
+                <td>₱{{ order.price|floatformat:2 }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>₱{{ order.total_price|floatformat:2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total-section">
+        <div class="total-row">
+            <span>TOTAL AMOUNT</span>
+            <span>₱{{ order.total_price|floatformat:2 }}</span>
+        </div>
+    </div>
+
+    <div class="payment-info">
+        <h3 class="section-title">PAYMENT INFORMATION</h3>
+        <p><strong>Payment Method:</strong> Not specified</p>
+        <p><strong>Cashier:</strong> Store Staff</p>
+    </div>
+
+    <div class="footer">
+        <h3>Thank You for Your Purchase!</h3>
+        <p>We appreciate your business.</p>
+        <p>Please keep this receipt for your records.</p>
+        <p>********************************</p>
+        <p>HARDWARE STORE - Quality Materials, Better Service</p>
+    </div>
+
+</div>
+
+<div class="buttons">
+    <button class="print-btn" onclick="window.print()">
+        Print Receipt
+    </button>
+
+    <a href="{% url 'customer_orders' %}" class="back-btn">
+        Back to Orders
+    </a>
+</div>
+
+</body>
+</html>

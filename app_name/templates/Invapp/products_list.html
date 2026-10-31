@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IMS | Product Management</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: 'Segoe UI', sans-serif;
+            color: #24324b;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: linear-gradient(180deg, #142b47, #1e3a5f);
+            min-height: 100vh;
+            padding: 25px 12px;
+            color: white;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 700;
+            padding: 0 15px;
+            margin-bottom: 35px;
+        }
+
+        .sidebar .nav-link {
+            color: #dce9ff;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 30px;
+            min-width: 0;
+        }
+
+        .page-title {
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        /* STATISTICS */
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            height: 100%;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.08);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            margin-bottom: 12px;
+        }
+
+        /* PRODUCT CARDS */
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .product-item {
+            background: white;
+            border: 1px solid #e8edf4;
+            border-radius: 14px;
+            overflow: hidden;
+            height: 100%;
+            transition: 0.25s;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.09);
+        }
+
+        .product-image-wrapper {
+            height: 190px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-placeholder {
+            font-size: 55px;
+            color: #94a3b8;
+        }
+
+        .product-details {
+            padding: 18px;
+        }
+
+        .product-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #24324b;
+            margin-bottom: 8px;
+        }
+
+        .product-id {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .product-price {
+            font-size: 21px;
+            font-weight: 800;
+            color: #1e3a5f;
+        }
+
+        .product-info {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .stock-badge {
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 7px;
+            margin-top: 15px;
+        }
+
+        .product-actions .btn {
+            flex: 1;
+            font-size: 12px;
+            border-radius: 7px;
+        }
+
+        .product-actions form {
+            flex: 1;
+            margin: 0;
+        }
+
+        .product-actions form button {
+            width: 100%;
+        }
+
+        /* BUTTONS */
+        .btn-add {
+            background: #1e3a5f;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 9px;
+            font-weight: 600;
+        }
+
+        .btn-add:hover {
+            background: #142b47;
+            color: white;
+        }
+
+        .search-area {
+            max-width: 600px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 767px) {
+            .sidebar {
+                min-height: auto;
+                padding: 15px;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .page-title {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <aside class="col-md-3 col-lg-2 sidebar">
+
+            <div class="brand">
+                <i class="bi bi-tools"></i> IMS
+                <small class="d-block text-white-50 fs-6 fw-normal">
+                    Hardware Store
+                </small>
+            </div>
+
+            <nav class="nav flex-column">
+
+                <a href="{% url 'products_list' %}" class="nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    Dashboard
+                </a>
+
+                <a href="{% url 'products_list' %}" class="nav-link active">
+                    <i class="bi bi-box-seam"></i>
+                    Products
+                </a>
+
+                <a href="{% url 'customer_orders' %}" class="nav-link">
+                    <i class="bi bi-cart-check"></i>
+                    Customer Orders
+                </a>
+
+                <a href="#" class="nav-link">
+                    <i class="bi bi-truck"></i>
+                    Suppliers
+                </a>
+
+                <a href="#" class="nav-link">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+
+            </nav>
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="col-md-9 col-lg-10 main-content">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+                <div>
+                    <h1 class="page-title mb-1">
+                        Product Management
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Manage your hardware and construction materials inventory.
+                    </p>
+                </div>
+
+                <a href="{% url 'add_product' %}" class="btn btn-add">
+                    <i class="bi bi-plus-lg"></i>
+                    Add Product
+                </a>
+
+            </div>
+
+
+            <!-- DJANGO MESSAGES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
+                        {{ message }}
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert">
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- STATISTICS -->
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                        <p class="text-muted mb-1">Total Products</p>
+                        <h3 class="fw-bold mb-0">{{ total_products }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success-subtle text-success">
+                            <i class="bi bi-boxes"></i>
+                        </div>
+
+                        <p class="text-muted mb-1">Total Stock</p>
+                        <h3 class="fw-bold mb-0">{{ total_stock }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+
+                        <p class="text-muted mb-1">Low Stock Products</p>
+                        <h3 class="fw-bold mb-0">{{ low_stock }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info-subtle text-info">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+
+                        <p class="text-muted mb-1">Inventory Value</p>
+                        <h3 class="fw-bold mb-0">
+                            ₱{{ inventory_value|floatformat:2 }}
+                        </h3>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCTS SECTION -->
+            <div class="product-card">
+
+                <!-- SEARCH -->
+                <form method="GET"
+                      action="{% url 'products_list' %}"
+                      class="mb-4">
+
+                    <div class="input-group search-area">
+
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input type="text"
+                               name="q"
+                               class="form-control"
+                               placeholder="Search product name..."
+                               value="{{ request.GET.q|default:'' }}">
+
+                        <button type="submit" class="btn btn-primary px-4">
+                            Search
+                        </button>
+
+                        <a href="{% url 'products_list' %}"
+                           class="btn btn-outline-secondary">
+                            Clear
+                        </a>
+
+                    </div>
+                </form>
+
+
+                <!-- SECTION HEADER -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+
+                    <div>
+                        <h5 class="fw-bold mb-1">All Products</h5>
+                        <small class="text-muted">
+                            Browse your hardware and construction materials.
+                        </small>
+                    </div>
+
+                    <span class="badge bg-primary-subtle text-primary p-2">
+                        <i class="bi bi-grid"></i>
+                        Product Gallery
+                    </span>
+
+                </div>
+
+
+                <!-- PRODUCT CARD GRID -->
+                <div class="row g-4">
+
+                    {% for product in products %}
+
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+
+                        <div class="product-item">
+
+                            <!-- PRODUCT IMAGE -->
+                            <div class="product-image-wrapper">
+
+                                {% if product.image %}
+                                    <img
+                                        src="{{ product.image.url }}"
+                                        alt="{{ product.name }}"
+                                        class="product-image"
+                                    >
+                                {% else %}
+                                    <div class="text-center">
+                                        <i class="bi bi-image image-placeholder"></i>
+                                        <p class="text-muted small mb-0">
+                                            No Image Available
+                                        </p>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- PRODUCT DETAILS -->
+                            <div class="product-details">
+
+                                <div class="product-id mb-1">
+                                    PRODUCT #{{ product.id }}
+                                </div>
+
+                                <h5 class="product-name">
+                                    {{ product.name }}
+                                </h5>
+
+                                <div class="product-price mb-3">
+                                    ₱{{ product.price|floatformat:2 }}
+                                </div>
+
+                                <div class="product-info">
+                                    <i class="bi bi-box-seam text-primary"></i>
+                                    Quantity:
+                                    <strong>{{ product.quantity }}</strong>
+                                </div>
+
+                                <div class="product-info">
+                                    <i class="bi bi-truck text-primary"></i>
+                                    Supplier:
+                                    <strong>{{ product.supplier }}</strong>
+                                </div>
+
+
+                                <!-- STOCK STATUS -->
+                                <div class="mt-3">
+
+                                    {% if product.quantity == 0 %}
+
+                                        <span class="badge bg-danger stock-badge">
+                                            <i class="bi bi-x-circle"></i>
+                                            Out of Stock
+                                        </span>
+
+                                    {% elif product.quantity < 5 %}
+
+                                        <span class="badge bg-warning text-dark stock-badge">
+                                            <i class="bi bi-exclamation-circle"></i>
+                                            Low Stock
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-success stock-badge">
+                                            <i class="bi bi-check-circle"></i>
+                                            In Stock
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- ACTION BUTTONS -->
+                                <div class="product-actions">
+
+                                    <a href="{% url 'edit_product' product.id %}"
+                                       class="btn btn-outline-primary btn-sm">
+
+                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
+
+                                    </a>
+
+
+                                    <form method="POST"
+                                          action="{% url 'delete_product' product.id %}"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?');">
+
+                                        {% csrf_token %}
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger btn-sm">
+
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="col-12">
+
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-inbox fs-1 text-secondary"></i>
+
+                            <h5 class="fw-bold mt-3">
+                                No Products Found
+                            </h5>
+
+                            <p class="text-muted">
+                                No products match your search or your inventory is empty.
+                            </p>
+
+                            <a href="{% url 'add_product' %}"
+                               class="btn btn-primary">
+
+                                <i class="bi bi-plus-lg"></i>
+                                Add Your First Product
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+            <div class="text-center text-muted small mt-4">
+
+                <i class="bi bi-tools"></i>
+                IMS Hardware & Construction Materials Store
+
+                <br>
+
+                <span>Inventory Management System</span>
+
+            </div>
+
+        </main>
+
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
